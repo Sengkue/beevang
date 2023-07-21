@@ -36,11 +36,8 @@
       <template #[`item.price`]="{ item }">
         {{ formatPrice(item.price) }}ກີບ
       </template>
-      <template #[`item.createdAt`]="{ item }">
-        {{ formatDate(item.createdAt) }}
-      </template>
-      <template #[`item.updatedAt`]="{ item }">
-        {{ formatDate(item.updatedAt) }}
+      <template #[`item.created_at`]="{ value }">
+        {{ formatDate(value) }}
       </template>
     </v-data-table>
   </div>
@@ -53,11 +50,10 @@ export default {
       headers: [
         { text: 'ລຳດັບ', value: 'index' },
         { text: 'ຊື່ສິນຄ້າ', value: 'name' },
-        { text: 'ຈຳນວນ', value: 'quantity' },
+        { text: 'ຈຳນວນ', value: 'all_quatity' },
         { text: 'ລາຄາຂາຍ', value: 'sale_price' },
         { text: 'ລາຄາ', value: 'price' },
-        { text: 'ວັນທີລົງທະບຽນ', value: 'createdAt' },
-        { text: 'ວັນທີປັບປຸງ', value: 'updatedAt' },
+        { text: 'ວັນທີລົງທະບຽນ', value: 'created_at' }
       ],
       products: [],
       search: '',
@@ -69,7 +65,7 @@ export default {
   methods: {
     fetchProducts() {
       this.$axios
-        .get('http://localhost:2023/reports/product-finished')
+        .get('http://localhost:2023/reports/product')
         .then((response) => {
           this.products = response.data.map((item, index) => {
             return {

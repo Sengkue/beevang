@@ -8,6 +8,7 @@
       app
       width="290"
     >
+    
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -162,6 +163,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app elevation="1">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />

@@ -36,7 +36,7 @@
                     >
                       <div class="">
                         <v-img
-                          src="/noimage.png"
+                          :src=item.profile
                           contain
                           style="
                             width: 100%;

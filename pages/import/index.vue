@@ -52,7 +52,7 @@
     </v-card>
     <v-row class="mt-3">
       <v-col cols="12" class="text-end">
-        <v-btn :loading="loading" class="cyan-accent-4 white--text" @click="saveImport">
+        <v-btn :loading="loading" color="success" @click="saveImport">
           <span >ບັນທຶກການນຳເຂົ້າ</span>
           <v-icon color="white">mdi-content-save-check-outline</v-icon>
         </v-btn>

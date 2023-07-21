@@ -10,9 +10,9 @@
           to="/reports/reportProductEnd"
         >
           <div class="d-flex justify-space-around align-center">
-            <v-card-subtitle>ລາຍງານສິນຄ້າໃກ້ຈະໜົດ</v-card-subtitle>
+            <v-card-subtitle>ລາຍງານສິນຄ້າໃກ້ໝົດສະຕ໊ອກ</v-card-subtitle>
             <v-btn fab small color="success">
-              <v-icon>mdi-close-box-outline</v-icon>
+              <v-icon>mdi-shopping</v-icon>
             </v-btn>
           </div>
         </v-card>
@@ -52,7 +52,7 @@
           rounded="lg"
           style="cursor: pointer"
           class="pa-3"
-          to="/reports/Treatment_infomation"
+          to="/reports/reportTopsell"
         >
           <div class="d-flex justify-space-around align-center">
             <v-card-subtitle>ລາຍງາຍຂໍ້ມູນສິນຄ້າທີ່ຂາຍໄດ້ຫຼາຍ</v-card-subtitle>
@@ -70,9 +70,9 @@
           to="/reports/reportAllProduct"
         >
           <div class="d-flex justify-space-around align-center">
-            <v-card-subtitle>ລາຍງານຂໍ້ມູນສິນຄ້າທັງໝົດ</v-card-subtitle>
+            <v-card-subtitle>ລາຍງານສິນຄ້າທັງໜົດໃນສະຕ້ອກ</v-card-subtitle>
             <v-btn fab small color="success">
-              <v-icon color="white">mdi-expand-all</v-icon>
+              <v-icon color="white">mdi-package-variant-plus</v-icon>
             </v-btn>
           </div>
         </v-card>
@@ -82,7 +82,7 @@
           rounded="lg"
           style="cursor: pointer"
           class="pa-3"
-          to="/reports/Treatment_infomation"
+          to="/reports/reportIncomeOutcome"
         >
           <div class="d-flex justify-space-around align-center">
             <v-card-subtitle>ລາຍງານລາຍຮັບ-ລາຍຈ່າຍ</v-card-subtitle>

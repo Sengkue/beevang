@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="d-flex justify-space-between">
-      <h3>ລາຍງານ >> ລາຍງານສິນຄ້າໃກ້ຈະໜົດ</h3>
-      <v-btn color="error" to="/reports/reportTable"
-        ><v-icon>mdi-arrow-left-circle</v-icon> ກັບ</v-btn
-      >
+      <h3>ລາຍງານ >> ຂໍ້ມູນສິນຄ້າທີຂາຍໄດ້ຫຼາຍ</h3>
+      <v-btn color="error" to="/reports/reportTable">
+        <v-icon>mdi-arrow-left-circle</v-icon> ກັບ
+      </v-btn>
     </div>
     <v-data-table
       :headers="headers"
@@ -26,14 +26,8 @@
           ></v-text-field>
         </v-toolbar>
       </template>
-      <template #[`item.sale_price`]="{ item }">
-        {{ formatPrice(item.sale_price) }}ກີບ
-      </template>
-      <template #[`item.price`]="{ item }">
-        {{ formatPrice(item.price) }}ກີບ
-      </template>
-      <template #[`item.created_at`]="{ item }">
-        {{ formatDateLo(item.created_at) }}
+      <template #[`item.Sale_qty`]="{ item }">
+        {{ item.Sale_qty }}
       </template>
     </v-data-table>
   </div>
@@ -44,13 +38,11 @@ export default {
   data() {
     return {
       headers: [
-        { text: 'ລຳດັບ', value: 'index' },
+      { text: 'ລຳດັບ', value: 'index', width: '50' },
         { text: 'ຊື່', value: 'name' },
-        { text: 'ຈຳນວນ', value: 'quatity' },
-        { text: 'ລາຄາຂາຍ', value: 'sale_price' },
-        { text: 'ລາຄາ', value: 'price' },
         { text: 'ປະເພດສິນຄ້າ', value: 'product_type_name' },
-        { text: 'ວັນທີສ້າງ', value: 'created_at' },
+        { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
+        { text: 'ຈຳນວນຂາຍ', value: 'Sale_qty' },
       ],
       products: [],
       search: '',
@@ -62,12 +54,15 @@ export default {
   methods: {
     fetchProducts() {
       this.$axios
-        .get('http://localhost:2023/product/almost-out-of-stock')
+        .get('http://localhost:2023/reports/top-sale')
         .then((response) => {
-          this.products = response?.data?.products.map((item, index) => {
+          this.products = response.data.map((item, index) => {
             return {
-              index: index + 1,
-              ...item,
+                index: index + 1,
+              product_type_name: item.product_type_name,
+              unit_name: item.unit_name,
+              name: item.name,
+              Sale_qty: item.Sale_qty,
             }
           })
         })

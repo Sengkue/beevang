@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="4" class="ma-0">
         <v-card height="70" class="pa-2 d-flex justify-space-between pr-5" elevation="0"
-          >ລາຍການຂາຍໃຫມ່
+          >ສິນຄ້າໃກ້ໝົດສະຕ໊ອກ
               <v-btn text small fab color="success">
                 <v-badge :content="sell" color="error">
                   <v-icon>mdi-bell-plus-outline</v-icon>
@@ -57,7 +57,7 @@
           class="pa-2 d-flex justify-space-between"
           elevation="0"
           style="cursor: pointer"
-          >ປະເພດທັງໝົດ
+          >ປະເພດສິນຄ້າທັງໝົດ
           <v-btn class="cyan accent-4 white--text mt-5" rounded
             ><span style="color: white">{{
               getProductType.count ? getProductType.count : '0'
@@ -65,7 +65,7 @@
           >
         </v-card>
       </v-col>
-      <v-col class="6">
+      <v-col cols="6">
         <home-top-product-graph-year />
       </v-col>
       <v-col cols="6">
@@ -131,7 +131,7 @@ export default {
     this.$axios.get(`http://localhost:2023/sale_detail/sale-details/summary?year=${this.selectedYear}&limit=10`).then((res)=>{
       this.topSellYear = res.data.overallSum
     })
-    this.$axios.get(`http://localhost:2023/sale`).then((res)=>{
+    this.$axios.get(`http://localhost:2023/product/almost-out-of-stock`).then((res)=>{
       this.sell = res.data.count
     })
     // await this.$store.dispatch('user/getPatiented')

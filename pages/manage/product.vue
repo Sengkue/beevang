@@ -40,6 +40,9 @@
         color="success"
         :search="searchTerm"
       >
+      <template #[`item.profile`]="{value}">
+        <v-img :src="value" width="60"></v-img>
+      </template>
         <template #[`item.action`]="{ item }">
           <v-tooltip top color="error">
             <template #activator="{ on, attrs }">
@@ -274,6 +277,38 @@
             />
           </v-col>
           <v-spacer></v-spacer>
+          <v-col cols="6" class="">
+            <div class="justify-center text-center mt-5">
+              <div>
+                <v-avatar
+                  size="130"
+                  style="
+                    border-radius: 10%;
+                    border: 3px solid teal;
+                    box-shadow: 12px;
+                  "
+                >
+                  <v-img v-if="url" :src="url"></v-img>
+                  <v-img v-else src="/images/logo.png"></v-img>
+                </v-avatar>
+              </div>
+              <v-file-input
+                id="file"
+                v-model="file"
+                :rules="imageRules"
+                label="Image"
+                class="d-none"
+                prepend-icon="mdi-camera"
+                @change="onFileChange"
+              ></v-file-input>
+              <!-- Upload button -->
+              <v-btn class="mt-2" color="primary" small @click="upload">
+                <v-icon>mdi-tray-arrow-up</v-icon>
+                Upload
+              </v-btn>
+            </div>
+          </v-col>
+
           <div class="d-flex justify-end pa-4">
             <v-btn
               width="100"
@@ -294,6 +329,19 @@ export default {
   name: 'ManageProductType',
   data() {
     return {
+      urlImage:null,
+      file: null,
+      url: null,
+      imageRules: [
+        (value) =>
+          !value ||
+          value.size < 2000000 ||
+          'Image size should be less than 2 MB!',
+        (value) =>
+          !value ||
+          ['image/jpeg', 'image/png'].includes(value.type) ||
+          'Only JPEG/PNG images are allowed!',
+      ],
       loading: false,
       product_type: {
         name: '',
@@ -325,12 +373,13 @@ export default {
 
       headers: [
         { text: 'ລະຫັດ', value: 'barcode' },
-        { text: 'ຜູ້ສະໜອງ', value: 'supplier_name' },
-        { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
-        { text: 'ປະເພດສິນຄ້າ', value: 'product_type_name' },
+        { text: 'ຮູບ', value: 'profile' },
         { text: 'ຊື່ສິນຄ້າ', value: 'name' },
+        { text: 'ປະເພດສິນຄ້າ', value: 'product_type_name' },
+        { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
         { text: 'ລາຄາຂາຍ', value: 'sale_price' },
         { text: 'ຈຳນວນ', value: 'quatity' },
+        { text: 'ຜູ້ສະໜອງ', value: 'supplier_name' },
         { text: 'ວັນທີ່', value: 'created_at' },
         { text: 'actions', value: 'action' },
       ],
@@ -357,6 +406,15 @@ export default {
     await this.$store.dispatch('product/getProductData')
   },
   methods: {
+    onFileChange(e) {
+      if (e) {
+        this.url = URL.createObjectURL(e)
+      }
+    },
+
+    upload() {
+      document.getElementById('file').click()
+    },
     toCurrencyString(number) {
       return laoCurrency(number).format('LAK S')
     },
@@ -389,9 +447,24 @@ export default {
       this.loading = false
     },
     async addData() {
+      const file = this.file
+      if (file) {
+        const formData = new FormData()
+        formData.append('file', file)
+        try {
+          const response = await this.$axios.post(
+            'http://localhost:2023/upload/single',
+            formData
+          )
+          this.urlImage = response?.data?.url
+        } catch (error) {
+          this.$toast.error('File upload failed', error)
+        }
+      }
       this.loading = true
       const data = {
         name: this.name,
+        profile:this.urlImage,
         quatity: this.quatity,
         sale_price: this.sale_price,
         price: this.price,

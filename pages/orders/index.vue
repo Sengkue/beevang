@@ -157,7 +157,12 @@ export default {
     })
   },
   methods: {
+    
     async order() {
+      if(this.supId === null || this.supId === ''){
+        this.$toast.error('ເລືອກຂໍ້ມູນຜູ້ສະໜອງກ່ອນ!')
+        return
+      }
       this.loading = true
       const orderItems = this.selectedItems.map(item => {
     return {

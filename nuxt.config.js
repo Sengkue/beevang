@@ -47,6 +47,12 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ['cookie-universal-nuxt', '@nuxtjs/axios', '@nuxtjs/toast'],
+  toast: {
+    position: 'top-right',
+    duration: 3000,
+    className: ['my-toast'],
+    containerClass: ['my-toast-container'],
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
