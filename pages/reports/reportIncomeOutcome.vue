@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex justify-space-between">
-      <h3>ລາຍງານ >> ຂໍ້ມູນສິນຄ້າທີຂາຍໄດ້ຫຼາຍ</h3>
+      <h3>ລາຍງານ >> ຂໍ້ມູນລາຍຮັບລາຍຈ່າຍ</h3>
       <v-btn color="error" to="/reports/reportTable">
         <v-icon>mdi-arrow-left-circle</v-icon> ກັບ
       </v-btn>
