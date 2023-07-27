@@ -73,6 +73,9 @@
             <span>ເເກ້ໄຂ</span>
           </v-tooltip>
         </template>
+        <template #[`item.price`]="{value}">
+          {{ formatPrice(value) }} ກີບ
+        </template>
       </v-data-table>
     </v-card>
     <!-- show delete data -->
@@ -251,8 +254,9 @@ export default {
         price: '',
       },
       headers: [
+        { text: 'ລຳດັບ', value: 'index', width:'70' },
         { text: 'ຊື່', value: 'name' },
-        { text: 'ລາຄາ', value: 'price' },
+        { text: 'ອັດຕາແລກປ່ຽນ', value: 'price' },
         { text: 'Actions', value: 'action' },
       ],
       showDiseas: [],
@@ -267,8 +271,9 @@ export default {
         const response = await axios.get('http://localhost:2023/exchange');
         const exchangeData = response.data;
 
-        this.showDiseas = exchangeData.map((exchange) => {
+        this.showDiseas = exchangeData.map((exchange, index) => {
           return {
+            index: index + 1,
             id: exchange.id,
             name: exchange.name,
             price: exchange.bathtokip || exchange.dollartokip,

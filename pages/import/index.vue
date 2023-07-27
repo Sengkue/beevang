@@ -4,7 +4,7 @@
     <!-- <div>ກວດສອບນຳເຂົ້າ</div> -->
     <v-card>
       <v-row class="d-flex col-12">
-        <v-col cols="6">
+        <!-- <v-col cols="6">
           <v-card-title>
             <v-text-field
               v-model="billId"
@@ -18,6 +18,35 @@
               @keydown.enter="searchData"
             />
           </v-card-title>
+        </v-col> -->
+        <v-col cols="6">
+          <v-autocomplete
+              v-model="billId"
+              auto-select-first
+              chips
+              clearable
+              outlined
+              :items="orders"
+              item-value="bill_number"
+              item-text="bill_number"
+              dense
+              deletable-chips
+              prepend-inner-icon="mdi-file-find"
+              label="ປ້ອນເລກໃບສັ່ງຊື້ສິນຄ້າ"
+              single-line
+              hide-details
+              @change="searchData"
+              >
+              <template #item="{ item }">
+                <div class="select-item d-flex align-center justify-center">
+                  <span>{{ item.bill_number }}</span>
+                  <span> || </span>
+                  <span class="primary--text">{{
+                    formatDateLo(item.order_date)
+                  }}</span>
+                </div>
+              </template>
+            </v-autocomplete>
         </v-col>
       </v-row>
       <v-data-table :headers="headers" :items="importData" color="#9155FD">
@@ -67,7 +96,7 @@
       >
         <v-card>
           <v-toolbar dark color="#9155FD">
-            <div>ນຳເຂົ້າຢາ</div>
+            <div>ນຳເຂົ້າສິນຄ້າ</div>
             <v-spacer></v-spacer>
             <v-btn icon dark @click="dialog = false">
               <v-icon>mdi-close</v-icon>
@@ -152,6 +181,7 @@ export default {
   name: 'ImportPages',
   data() {
     return {
+      orders:[],
       loading: false,
       billId: '',
       importData: [],
@@ -204,7 +234,18 @@ export default {
       )
     },
   },
+  mounted() {
+    this.fetchOrders()
+  },
   methods: {
+    async fetchOrders() {
+      try {
+        const response = await this.$axios.get('http://localhost:2023/order')
+        this.orders = response.data
+      } catch (error) {
+        this.$toast.error(error)
+      }
+    },
     noNegativeSign(value) {
       if (value.includes('-') !== -1) {
         this.myNumber = value.replace('-', '')
@@ -241,14 +282,6 @@ export default {
           },
         })
         .then((res) => {
-          // if (res.data.status === 400) {
-          //   this.$toast.error('ລະຫັດໃບບິນນີ້ໄດ້ນຳເຂົ້າກ່ອນໜ້ານີເເລ້ວ', {
-          //     duration: 2000,
-          //     position: 'top-right',
-          //     iconPack: 'mdi',
-          //     icon: 'close',
-          //   })
-          // } else {
           this.loading = false
           this.importData = []
           this.expired_date = ''
@@ -260,13 +293,13 @@ export default {
             icon: 'check',
           })
           this.$router.push('/import')
-          // }
+          this.fetchOrders()
         })
     },
     // billId
-    searchData(e) {
+    searchData() {
       this.$axios
-        .get(`http://localhost:2023/order/${e.target.value}`, {
+        .get(`http://localhost:2023/order/${this.billId}`, {
           headers: {
             Authorization: `LMCOMPUTER  ${this.token}`,
           },

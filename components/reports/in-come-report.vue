@@ -16,6 +16,7 @@
                   v-model="startDate"
                   label="Start Date"
                   prepend-icon="mdi-calendar"
+                  clearable
                   readonly
                   v-bind="attrs"
                   v-on="on"
@@ -36,7 +37,7 @@
               </v-date-picker>
             </v-dialog>
           </v-col>
-
+          <div class="mt-8">>>>></div>
           <v-col cols="12" sm="6" md="4">
             <v-dialog
               ref="endDialog"
@@ -50,6 +51,7 @@
                   v-model="endDate"
                   label="End Date"
                   prepend-icon="mdi-calendar"
+                  clearable
                   readonly
                   v-bind="attrs"
                   v-on="on"
@@ -72,7 +74,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="6" class='d-flex justify-end'>
+      <v-col cols="6" class="d-flex justify-end">
         <v-card class="pa-3">
           <strong>ລວມເງິນທັງໝົດ:</strong> {{ totalKipSum.toLocaleString() }} ກີບ
         </v-card>
@@ -82,28 +84,12 @@
       :headers="headers"
       :items="filteredIncome"
       item-key="id"
-      :search="search"
       :footer-props="{
         itemsPerPageOptions: [5, 10, 20, -1],
         showCurrentPage: true,
         showFirstLastPage: true,
       }"
     >
-      <template #top>
-        <v-row>
-          <v-col cols="6">
-            <v-text-field
-              v-model="search"
-              label="ຄົ້ນຫາ"
-              clearable
-              outlined
-              dense
-              hide-details
-              placeholder="ຄົ້ນຫາຂໍ້ມູນລາຍຮັບ"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </template>
       <template #[`item.createdAt`]="{ item }">
         {{ formatDate(item.createdAt) }}
       </template>
@@ -132,7 +118,6 @@ export default {
       modalEnd: false,
       income: [],
       filteredIncome: [],
-      search: '',
       headers: [
         { text: 'ລຳດັບ', value: 'index', align: 'start', width: '50' },
         { text: 'ຊື່ພະນັກງານ', value: 'employeeFirst_name', align: 'start' },
@@ -140,7 +125,6 @@ export default {
         // { text: 'ຈຳນວນຂາຍ', value: 'totalQuantity', align: 'start' },
         { text: 'ເງິນ', value: 'Totalkip', align: 'start' },
         // { text: 'ເບິ່ງ', value: 'actions', align: 'start' },
-
       ],
     }
   },
@@ -193,8 +177,8 @@ export default {
             }
           })
         })
-        .catch((error) => {
-          this.$toast.error(error.message)
+        .catch(() => {
+          this.filteredIncome = []
         })
     },
   },
