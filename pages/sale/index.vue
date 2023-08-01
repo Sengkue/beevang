@@ -7,15 +7,27 @@
             <v-row>
               <v-col cols="12">
                 <v-row>
-                  <v-col cols="12">
+                  <v-col cols="6">
                     <v-text-field
                       v-model="search"
-                      label="Search"
+                      label="ຄົ້ນຫາ"
                       outlined
                       hide-details
                       dense
-                      prepend-inner-icon="mdi-barcode-scan"
+                      prepend-inner-icon="mdi-magnify"
                     ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      v-model="category_id"
+                      :items="category_data"
+                      outlined
+                      dense
+                      clearable
+                      item-text="name"
+                      item-value="id"
+                      label="ເລືອກປະເພດສິນຄ້າ"
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-col>
@@ -36,7 +48,7 @@
                     >
                       <div class="">
                         <v-img
-                          :src=item.profile
+                          :src="item.profile"
                           contain
                           style="
                             width: 100%;
@@ -69,12 +81,12 @@
                         <v-card-text>
                           <div class="font-weight-black">
                             {{
-                              item.name.length <= 10
+                              item.name.length <= 15
                                 ? item.name
-                                : item.name?.slice(0, 20) + '...'
+                                : item.name?.slice(0, 10) + '...'
                             }}
                           </div>
-                          <div class="info--text">{{ item.sale_price }}kip</div>
+                          <div class="info--text">{{ formatPrice(item.sale_price) }}kip</div>
                         </v-card-text>
                       </div>
                     </v-card>
@@ -402,7 +414,7 @@
                     <tr>
                       <th>ສິນຄ້າ</th>
                       <th>ລາຄາ</th>
-                      <th class="px-5">ຈຳນວນ</th>
+                      <th class="px-8">ຈຳນວນ</th>
                       <th>ທັງໝົດ</th>
                       <th class="px-n5">X</th>
                     </tr>
@@ -411,7 +423,7 @@
                         {{
                           list.name.length <= 3
                             ? list.name
-                            : list.name?.slice(0, 5) + '...'
+                            : list.name?.slice(0, 3) + '...'
                         }}
                       </td>
                       <td>{{ formatPrice(list.sale_price) }}ກີບ</td>
@@ -449,7 +461,11 @@
                         </div>
                       </td>
 
-                      <td>{{ formatPrice(list.sale_price * list.order_amount) }}ກີບ</td>
+                      <td>
+                        {{
+                          formatPrice(list.sale_price * list.order_amount)
+                        }}ກີບ
+                      </td>
                       <td class="text-center">
                         <v-btn icon @click="DelOneList(list.id)">
                           <v-icon color="error" large>mdi-close</v-icon>
@@ -475,6 +491,7 @@ export default {
 
   data() {
     return {
+      category_id:null,
       exchangeBath: null,
       exchangeDollar: null,
       loading: false,
@@ -552,8 +569,13 @@ export default {
         0
       )
     },
+    category_data() {
+      return this.$store.state.productType.productTypeData.rows
+    },
     filteredRow() {
       const searchTerm = this.search ? this.search.toLowerCase().trim() : ''
+    const selectedCategoryId = this.category_id;
+
       return this.$store.state.product.productData
         .map((item, index) => {
           return {
@@ -566,16 +588,22 @@ export default {
             item.name && item.name.toLowerCase().includes(searchTerm)
           const barcodeMatch =
             item.barcode && item.barcode.toLowerCase().includes(searchTerm)
-          return nameMatch || barcodeMatch
+      const categoryFilter = !selectedCategoryId || item.product_type_id === selectedCategoryId;
+
+          return (nameMatch || barcodeMatch) && categoryFilter
         })
     },
   },
   async mounted() {
     await this.$store.dispatch('product/getProductData')
     await this.$store.dispatch('exchange/getExchange')
+    await this.$store.dispatch('productType/getAll')
+
+
   },
 
   methods: {
+
     onExchangeSelect() {
       const item = this.getExchange.find((i) => i.id === this.exchange_id)
       if (item.dollartokip > 0) {

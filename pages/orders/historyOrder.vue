@@ -1,6 +1,8 @@
 <template>
   <div>
-    <v-card class="cyan accent-4 white--text mb-2 d-flex justify-center font-weight-bold container">
+    <v-card
+      class="cyan accent-4 white--text mb-2 d-flex justify-center font-weight-bold container"
+    >
       <h2>ປະຫວັດຂໍ້ມູນສັ່ງຊື້ສິນຄ້າ</h2>
     </v-card>
     <v-data-table
@@ -12,16 +14,79 @@
       :loading="loading"
       :no-results-text="noResultsText"
     >
-    <template #top>
-      <v-text-field v-model="search" label="ຄົ້ນຫາ" outlined dense hide-details placeholder="Enter date/time or bill order"></v-text-field>
-    </template>
+      <template #top>
+        <v-text-field
+          v-model="search"
+          label="ຄົ້ນຫາ"
+          outlined
+          dense
+          hide-details
+          placeholder="Enter date/time or bill order"
+        ></v-text-field>
+      </template>
       <template #[`item.order_date`]="{ value }">
         <div>{{ formatDateLo(value) }}</div>
+      </template>
+      <template #[`item.order_details_price`]="{ value }">
+        {{ formatPrice(value) }} ກີບ
       </template>
       <template #[`item.status`]="{ value }">
         <div v-if="value === 1" class="red--text">ລໍຖ້ານຳເຂົ້າ...</div>
       </template>
+      <template #[`item.actions`]="{ item }">
+        <div>
+          <v-btn text icon @click="review(item)"
+            ><v-icon>mdi-eye</v-icon></v-btn
+          >
+        </div>
+      </template>
     </v-data-table>
+    <v-dialog v-model="openDetail" max-width="500px">
+      <v-card class="pa-2">
+        <div>
+          <!-- <div><strong>ລະຫັດ:</strong> {{ detailData.id }}</div> -->
+          <!-- <div><strong>ລະຫັດສິນຄ້າ:</strong> {{ detailData.product_id }}</div> -->
+          <div><strong>ເລກທີບິນ:</strong> {{ detailData.bill_number }}</div>
+          <div><strong>ປະເພດສິນຄ້າ:</strong> {{ detailData.type_name }}</div>
+          <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
+          <div><strong>ຊື່ສິນຄ້າ:</strong> {{ detailData.name }}</div>
+          <div>
+            <strong>ຈຳນວນຊື້:</strong> {{ detailData.order_qty }}
+            {{ detailData.unit_name }}
+          </div>
+          <div>
+            <strong>ວັນທີຊື້:</strong> {{ formatDate(detailData.order_date) }}
+          </div>
+          <!-- <div>
+            <strong>ຈຳນວນຍັງເຫຼືອ:</strong> {{ detailData.qty_small }}
+            {{ detailData.unit_name }}
+          </div> -->
+          <div>
+            <strong>ລາຄາລວມ:</strong>
+            {{ formatPrice(detailData.order_details_price) }} ກີບ
+          </div>
+          <div>
+            <strong>ລວມທັງໝົດ:</strong>
+            {{ formatPrice(detailData.total_price) }} ກີບ
+          </div>
+          <div>
+            <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
+          </div>
+          <div>
+            <strong>ຊື່ພະນັກງານ:</strong> {{ detailData.employee_name }}
+          </div>
+          <div>
+            <strong>ສະຖານະ:</strong> {{detailData.status}}
+          </div>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" @click="openDetail = false">
+            <v-icon>mdi-close</v-icon> ປິດ
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -31,15 +96,25 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      detailData: {},
+      openDetail: false,
       orders: [],
       headers: [
         { text: 'ໃບບິນ', value: 'bill_number' },
-        { text: 'ສີນຄ້າ', value: 'name' },
-        { text: 'ຈຳນວນສັ່ງຊື້', value: 'order_qty' },
-        { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
-        { text: 'ລາຄາ', value: 'order_details_price' },
+        { text: 'ພະນັກງາຍ', value: 'employee_name' },
+        { text: 'ຜູ້ສະໜອງ', value: 'supplier_name' },
+        // { text: 'ສີນຄ້າ', value: 'name' },
+        // { text: 'ຈຳນວນສັ່ງຊື້', value: 'order_qty' },
+        // { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
+        // { text: 'ລາຄາ', value: 'order_details_price' },
         { text: 'ສະຖານະ', value: 'status' },
-        { text: 'ວັນທີ່ສັ່ງຊື້', value: 'order_date', align: 'center', sortable: false },
+        {
+          text: 'ວັນທີ່ສັ່ງຊື້',
+          value: 'order_date',
+          align: 'center',
+          sortable: false,
+        },
+        { text: 'ຈັດການ', value: 'actions' },
       ],
       search: '',
       loading: false,
@@ -50,13 +125,17 @@ export default {
     this.fetchOrders()
   },
   methods: {
+    review(item) {
+      this.detailData = item
+      this.openDetail = true
+    },
     async fetchOrders() {
       try {
         this.loading = true
         const response = await axios.get('http://localhost:2023/order', {
           params: {
-            search: this.search
-          }
+            search: this.search,
+          },
         })
         this.orders = response.data
       } catch (error) {

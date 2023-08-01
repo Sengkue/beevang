@@ -13,7 +13,7 @@
       </v-col>
       <v-col cols="4" class="ma-0">
         <v-card height="70" class="pa-2 d-flex justify-space-between" elevation="0"
-          >ຍອດຂາຍທັງຂອງເດືອນ {{selectedMonth }} ໃນປີ {{  selectedYear }}
+          >ຍອດຂາຍທັງໝົດຂອງເດືອນ {{selectedMonth }} ໃນປີ {{  selectedYear }}
               <v-btn class="cyan accent-4 white--text mt-5" rounded
                 ><span style="color: white"
                   >{{ formatPrice(topSell? topSell.totalSalePrice : '0') }}ກີບ</span
@@ -23,7 +23,7 @@
       </v-col>
       <v-col cols="4" class="ma-0">
         <v-card height="70" class="pa-2 d-flex justify-space-between" elevation="0"
-          >ຍອດຂາຍທັງຂອງປີ {{ selectedYear }}
+          >ຍອດຂາຍທັງໝົດຂອງປີ {{ selectedYear }}
               <v-btn class="cyan accent-4 white--text mt-5" rounded
                 ><span style="color: white"
                   >{{ formatPrice(topSellYear ? topSellYear.totalSalePrice : '0') }}ກີບ</span

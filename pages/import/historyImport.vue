@@ -26,10 +26,13 @@
             {{ formatDateBill(value) }}
           </div>
         </template>
-        <template #[`item.actions`]>
+        <template #[`item.import_total_kip`]="{ value }">
+          <div>{{ formatPrice(value) }} ກີບ</div>
+        </template>
+        <template #[`item.actions`]="{ item }">
           <v-tooltip bottom color="primary">
-            <template v-slot:activator="{ on }">
-              <v-btn text small v-on="on" @click="review()">
+            <template #activator="{ on }">
+              <v-btn text small v-on="on" @click="review(item)">
                 <v-icon color="primary">mdi-eye</v-icon>
               </v-btn>
             </template>
@@ -38,6 +41,41 @@
         </template>
       </v-data-table>
     </v-card>
+    <v-dialog v-model="openDetail" max-width="500px">
+      <v-card class="pa-2">
+        <div>
+          <div><strong>ຊື່ສິນຄ້າ:</strong> {{ detailData.product_name }}</div>
+          <div><strong>ຈຳນວນ:</strong> {{ detailData.quatity }}</div>
+          <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
+          <div>
+            <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
+          </div>
+          <div>
+            <strong>ວັນທີ່ນຳເຂົ້າ:</strong>
+            {{ formatDate(detailData.import_date) }}
+          </div>
+          <div>
+            <strong>ລາຄາຕົ້ນທືນ:</strong>
+            {{ formatPrice(detailData.total_price) }} ກີບ
+          </div>
+          <div>
+            <strong>ລາຄາຂາຍ:</strong>
+            {{ formatPrice(detailData.sale_price) }} ກີບ
+          </div>
+          <div>
+            <strong>ລວມລາຄາທັງໝົກ:</strong>
+            {{ formatPrice(detailData.import_total_kip) }} ກີບ
+          </div>
+          <div><strong>ລະຫັດສິນຄ້າ:</strong> {{ detailData.barcode }}</div>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" @click="openDetail = false"
+            ><v-icon>mdi-close</v-icon> ປິດ</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -46,13 +84,15 @@ export default {
   name: 'HistoryImportS',
   data() {
     return {
+      detailData: {},
+      openDetail: false,
       getStory: [],
       token: this.$cookies.get('token'),
       search: '',
       headers: [
         { text: 'ລະຫັດໃບບິນ', value: 'id' },
         // { text: 'ຊື່ສິນຄ້າ', value: 'name' },
-        { text: 'ຈຳນວນ', value: 'import_total_kip' },
+        { text: 'ຈຳນວນ', value: 'quatity' },
         { text: 'ລາຄາ', value: 'import_total_kip' },
         // { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
         { text: 'ວັນເດືອນປີສັ່ງຊື້', value: 'order_date' },
@@ -78,6 +118,12 @@ export default {
           icon: 'close',
         })
       })
+  },
+  methods: {
+    review(item) {
+      this.detailData = item
+      this.openDetail = true
+    },
   },
 }
 </script>
