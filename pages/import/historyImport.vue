@@ -41,32 +41,50 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-dialog v-model="openDetail" max-width="500px">
-      <v-card class="pa-2">
+    <v-dialog v-model="openDetail" max-width="600px">
+      <v-card class="pa-5">
         <div>
-          <div><strong>ຊື່ສິນຄ້າ:</strong> {{ detailData.product_name }}</div>
-          <div><strong>ຈຳນວນ:</strong> {{ detailData.quatity }}</div>
-          <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
-          <div>
-            <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
+          <div class="d-flex justify-space-between">
+            <div><strong>ລະຫັດສິນຄ້າ:</strong> {{ detailData.barcode }}</div>
+            <div>
+              <strong>ວັນທີ່ນຳເຂົ້າ:</strong>
+              {{ formatDate(detailData.import_date) }}
+            </div>
           </div>
-          <div>
-            <strong>ວັນທີ່ນຳເຂົ້າ:</strong>
-            {{ formatDate(detailData.import_date) }}
+          <div class="d-flex justify-space-between">
+            <div>
+              <strong>ຊື່ພະນັກງານ:</strong> {{ detailData.employee_name }}
+            </div>
+            <div>
+              <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
+            </div>
           </div>
-          <div>
-            <strong>ລາຄາຕົ້ນທືນ:</strong>
-            {{ formatPrice(detailData.total_price) }} ກີບ
+          <div class="d-flex justify-space-between">
+            <div><strong>ຊື່ສິນຄ້າ:</strong> {{ detailData.product_name }}</div>
+            <div>
+              <strong>ປະເພດ:</strong> {{ detailData.product_type_name }}
+            </div>
           </div>
-          <div>
-            <strong>ລາຄາຂາຍ:</strong>
-            {{ formatPrice(detailData.sale_price) }} ກີບ
+          <div class="d-flex justify-space-between">
+            <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
+            <div><strong>ຈຳນວນ:</strong> {{ detailData.total_quaty }}</div>
           </div>
-          <div>
-            <strong>ລວມລາຄາທັງໝົກ:</strong>
-            {{ formatPrice(detailData.import_total_kip) }} ກີບ
+          <div class="d-flex justify-space-between">
+            <div>
+              <strong>ລາຄາຕົ້ນທືນ:</strong>
+              {{ formatPrice(detailData.total_price) }} ກີບ
+            </div>
+            <div>
+              <strong>ລາຄາຂາຍ:</strong>
+              {{ formatPrice(detailData.sale_price) }} ກີບ
+            </div>
           </div>
-          <div><strong>ລະຫັດສິນຄ້າ:</strong> {{ detailData.barcode }}</div>
+          <div class="d-flex justify-space-between">
+            <div>
+              <strong>ລວມລາຄາທັງໝົກ:</strong>
+              {{ formatPrice(detailData.import_total_kip) }} ກີບ
+            </div>
+          </div>
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>

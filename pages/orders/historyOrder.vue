@@ -41,42 +41,52 @@
         </div>
       </template>
     </v-data-table>
-    <v-dialog v-model="openDetail" max-width="500px">
-      <v-card class="pa-2">
+    <v-dialog v-model="openDetail" max-width="600px">
+      <v-card class="pa-5">
         <div>
-          <!-- <div><strong>ລະຫັດ:</strong> {{ detailData.id }}</div> -->
           <!-- <div><strong>ລະຫັດສິນຄ້າ:</strong> {{ detailData.product_id }}</div> -->
-          <div><strong>ເລກທີບິນ:</strong> {{ detailData.bill_number }}</div>
-          <div><strong>ປະເພດສິນຄ້າ:</strong> {{ detailData.type_name }}</div>
-          <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
-          <div><strong>ຊື່ສິນຄ້າ:</strong> {{ detailData.name }}</div>
-          <div>
-            <strong>ຈຳນວນຊື້:</strong> {{ detailData.order_qty }}
-            {{ detailData.unit_name }}
+          <div class="d-flex justify-space-between">
+            <div><strong>ເລກທີບິນ:</strong> {{ detailData.bill_number }}</div>
+            <div>
+              <strong>ສະຖານະ:</strong>
+              <span v-if="detailData.status === 1" class="red--text"
+                >ລໍຖ້ານຳເຂົ້າ...</span
+              >
+            </div>
           </div>
-          <div>
-            <strong>ວັນທີຊື້:</strong> {{ formatDate(detailData.order_date) }}
+          <div class="d-flex justify-space-between">
+            <div>
+              <strong>ຊື່ພະນັກງານ:</strong> {{ detailData.employee_name }}
+            </div>
+            <div>
+              <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
+            </div>
           </div>
-          <!-- <div>
-            <strong>ຈຳນວນຍັງເຫຼືອ:</strong> {{ detailData.qty_small }}
-            {{ detailData.unit_name }}
-          </div> -->
-          <div>
-            <strong>ລາຄາລວມ:</strong>
-            {{ formatPrice(detailData.order_details_price) }} ກີບ
+          <div class="d-flex justify-space-between">
+            <div><strong>ສິນຄ້າ:</strong> {{ detailData.name }}</div>
+            <div><strong>ປະເພດສິນຄ້າ:</strong> {{ detailData.type_name }}</div>
           </div>
-          <div>
-            <strong>ລວມທັງໝົດ:</strong>
-            {{ formatPrice(detailData.total_price) }} ກີບ
+          <div class="d-flex justify-space-between">
+            <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
+            <div><strong>ຈຳນວນຊື້:</strong> {{ detailData.order_qty }}</div>
           </div>
-          <div>
-            <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
+          <div class="d-flex justify-space-between">
+            <div>
+              <strong>ວັນທີຊື້:</strong> {{ formatDate(detailData.order_date) }}
+            </div>
+            <div>
+              <strong>ຈຳນວນຍັງເຫຼືອ:</strong> {{ detailData.qty_small }}
+            </div>
           </div>
-          <div>
-            <strong>ຊື່ພະນັກງານ:</strong> {{ detailData.employee_name }}
-          </div>
-          <div>
-            <strong>ສະຖານະ:</strong> {{detailData.status}}
+          <div class="d-flex justify-space-between">
+            <div>
+              <strong>ລາຄາລວມ:</strong>
+              {{ formatPrice(detailData.order_details_price) }} ກີບ
+            </div>
+            <div>
+              <strong>ລວມທັງໝົດ:</strong>
+              {{ formatPrice(detailData.total_price) }} ກີບ
+            </div>
           </div>
         </div>
         <v-card-actions>
