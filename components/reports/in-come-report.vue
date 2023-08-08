@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="6">
         <v-row>
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" sm="4" md="4">
             <v-dialog
               ref="startDialog"
               v-model="modalStart"
@@ -38,7 +38,7 @@
             </v-dialog>
           </v-col>
           <div class="mt-8">>>>></div>
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" sm="4" md="4">
             <v-dialog
               ref="endDialog"
               v-model="modalEnd"
@@ -71,6 +71,9 @@
                 </v-btn>
               </v-date-picker>
             </v-dialog>
+          </v-col>
+          <v-col cols="12" sm="4" md="4">
+            <v-btn color="primary" @click="printOut">ປິ່ນລາຍງານ</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -180,6 +183,91 @@ export default {
         .catch(() => {
           this.filteredIncome = []
         })
+    },
+    printOut(callback) {
+      const table = document.querySelector('.v-data-table__wrapper table')
+      const clonedTable = table.cloneNode(true)
+      const headers = clonedTable.querySelectorAll('thead th')
+      const actionsIndex = Array.from(headers).findIndex(
+        (header) => header.textContent.trim() === 'Actions'
+      )
+      if (actionsIndex !== -1) {
+        headers[actionsIndex].remove()
+        const rows = clonedTable.querySelectorAll('tbody tr')
+        rows.forEach((row) => row.children[actionsIndex].remove())
+      }
+
+      const printWindow = window.open('', '', 'height=500,width=800')
+      // printWindow.document.write(
+      //   '<html><head><title>ລາຍງານການຂາຍໜ້າຮ້ານ</title>'
+      // )
+      printWindow.document.write(`
+    <style>
+        *{
+          font-family: phetsarath ot;
+        }
+      table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        width: 100%;
+      }
+      td, th {
+        border: 1px solid black;
+        padding: 0.5rem;
+      }
+      .logo {
+        width: 80px;
+        height: auto;
+        margin-right: 10px;
+      }
+      .shop-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .shop-details {
+        margin-top: 10px;
+      }
+      .bill-date {
+        margin-bottom: 10px;
+      }
+      .total-price {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+    </style>
+  `)
+      printWindow.document.write('</head><body >')
+
+      // Add bill date
+      printWindow.document.write(
+        `<h2 style='text-align:center'>ລາຍງານລາຍຮັບ</h2>`
+      )
+
+      printWindow.document.write(
+        `<v-col cols="6" class="d-flex justify-end">
+        <v-card class="pa-3">
+          <strong>ລວມເງິນທັງໝົດ:</strong> ${ this.totalKipSum.toLocaleString()} ກີບ
+        </v-card>
+      </v-col>`
+      )
+
+
+      // Add table
+      printWindow.document.write(clonedTable.outerHTML)
+
+      printWindow.document.write('</body></html>')
+      printWindow.document.close()
+      printWindow.print()
+
+      // Clear the value after printing is complete
+      setTimeout(() => {
+        this.value = ''
+      }, 1000) // Wait for 1 second before clearing the value
+
+      if (typeof callback === 'function') {
+        callback()
+      }
     },
   },
 }
