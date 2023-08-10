@@ -20,6 +20,7 @@
           </v-text-field>
         </v-col>
       </v-row>
+      <!-- {{ getStory }} -->
       <v-data-table :headers="headers" :items="getStory" :search="search">
         <template #[`item.order_date`]="{ value }">
           <div>
@@ -51,6 +52,8 @@
               {{ formatDate(detailData.import_date) }}
             </div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div>
               <strong>ຊື່ພະນັກງານ:</strong> {{ detailData.employee_name }}
@@ -59,16 +62,22 @@
               <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
             </div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div><strong>ຊື່ສິນຄ້າ:</strong> {{ detailData.product_name }}</div>
             <div>
               <strong>ປະເພດ:</strong> {{ detailData.product_type_name }}
             </div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
-            <div><strong>ຈຳນວນ:</strong> {{ detailData.total_quaty }}</div>
+            <div><strong>ຈຳນວນ:</strong> {{ detailData.details_qty }}</div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div>
               <strong>ລາຄາຕົ້ນທືນ:</strong>
@@ -79,6 +88,8 @@
               {{ formatPrice(detailData.sale_price) }} ກີບ
             </div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div>
               <strong>ລວມລາຄາທັງໝົກ:</strong>
@@ -108,10 +119,10 @@ export default {
       token: this.$cookies.get('token'),
       search: '',
       headers: [
-        { text: 'ລະຫັດໃບບິນ', value: 'id' },
-        // { text: 'ຊື່ສິນຄ້າ', value: 'name' },
-        { text: 'ຈຳນວນ', value: 'quatity' },
-        { text: 'ລາຄາ', value: 'import_total_kip' },
+        { text: 'ລະຫັດໃບບິນ', value: 'barcode' },
+        { text: 'ຊື່ພະນັກງານ', value: 'employee_name' },
+        { text: 'ຈຳນວນ', value: 'details_qty' },
+        { text: 'ລາຄາ', value: 'total_price' },
         // { text: 'ຫົວໜ່ວຍ', value: 'unit_name' },
         { text: 'ວັນເດືອນປີສັ່ງຊື້', value: 'order_date' },
         { text: 'ເບິ່ງ', value: 'actions' },

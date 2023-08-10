@@ -54,6 +54,7 @@
               >
             </div>
           </div>
+          <v-divider class="my-2"></v-divider>
           <div class="d-flex justify-space-between">
             <div>
               <strong>ຊື່ພະນັກງານ:</strong> {{ detailData.employee_name }}
@@ -62,23 +63,28 @@
               <strong>ຊື່ຜູ້ສະໜອງ:</strong> {{ detailData.supplier_name }}
             </div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div><strong>ສິນຄ້າ:</strong> {{ detailData.name }}</div>
             <div><strong>ປະເພດສິນຄ້າ:</strong> {{ detailData.type_name }}</div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
+            <div><strong>ຈຳນວນ</strong> {{ detailData.qty_small }}</div>
+
             <div><strong>ຫົວໜ່ວຍ:</strong> {{ detailData.unit_name }}</div>
-            <div><strong>ຈຳນວນຊື້:</strong> {{ detailData.order_qty }}</div>
           </div>
+          <v-divider class="my-2"></v-divider>
+
           <div class="d-flex justify-space-between">
             <div>
-              <strong>ວັນທີຊື້:</strong> {{ formatDate(detailData.order_date) }}
-            </div>
-            <div>
-              <strong>ຈຳນວນຍັງເຫຼືອ:</strong> {{ detailData.qty_small }}
+              <strong>ວັນທີ່ສັ່ງຊື້:</strong>
+              {{ formatDate(detailData.order_date) }}
             </div>
           </div>
-          <div class="d-flex justify-space-between">
+          <!-- <div class="d-flex justify-space-between">
             <div>
               <strong>ລາຄາລວມ:</strong>
               {{ formatPrice(detailData.order_details_price) }} ກີບ
@@ -87,7 +93,7 @@
               <strong>ລວມທັງໝົດ:</strong>
               {{ formatPrice(detailData.total_price) }} ກີບ
             </div>
-          </div>
+          </div> -->
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -158,6 +164,3 @@ export default {
 }
 </script>
 
-<style>
-/* Your table styles go here */
-</style>

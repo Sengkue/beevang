@@ -72,9 +72,27 @@
               </v-date-picker>
             </v-dialog>
           </v-col>
+
           <v-col cols="12" sm="4" md="4">
-            <v-btn color="primary" @click="printOut">ປິ່ນລາຍງານ</v-btn>
+            <v-menu offset-y>
+                <template #activator="{ on, attrs }">
+                  <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                    Exports
+                  </v-btn>
+                </template>
+                <v-list class="py-0">
+                  <v-btn block text color="success" @click="exportToExcel"
+                    ><v-icon left>mdi-microsoft-excel</v-icon> excel</v-btn
+                  >
+                  <!-- <v-btn text color="primary" @click="printOut">ປິ່ນລາຍງານ</v-btn> -->
+                 
+                  <v-btn block text color="primary" @click="printOut"
+                    ><v-icon>mdi-printer</v-icon> ປິ່ນລາຍງານ</v-btn
+                  > 
+                </v-list>
+              </v-menu>
           </v-col>
+
         </v-row>
       </v-col>
       <v-col cols="6" class="d-flex justify-end">
@@ -109,6 +127,7 @@
 </template>
 
 <script>
+import * as XLSX from 'xlsx'
 export default {
   data() {
     return {
@@ -265,6 +284,28 @@ export default {
       if (typeof callback === 'function') {
         callback()
       }
+    },
+    exportToExcel() {
+      const data = this.filteredIncome
+
+      const modifiedData = data.map((item, index) => {
+        return {
+          ລຳດັບ: index + 1,
+          ຊື່ພະນັກງານ: item.name,
+          ຈຳນວນ: item.total_quaty,
+          ເງິນ: `${this.formatPrice(item.import_total_kip)}`,
+          ວັນທີ: `${this.formatDateBill(item.import_date)}`,
+        }
+      })
+
+      const ws = XLSX.utils.json_to_sheet(modifiedData)
+
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
+
+      const date = new Date().toISOString().slice(0, 10)
+      const filename = `data_${date}.xlsx`
+      XLSX.writeFile(wb, filename)
     },
   },
 }

@@ -117,10 +117,9 @@ export default {
       printWindow.document.write('<html><head><title>ບິນຂາຍຮ້ານເມໄໝ</title>')
       printWindow.document.write(`
     <style>
-      @font-face {
-        font-family: 'Noto Sans Lao Looped';
-        src: url('assets/fonts/NotoSerifLao.ttf') format('truetype');
-      }
+     *{
+      font-family: Phetsarath ot;
+     }
       table {
         border-collapse: collapse;
         margin: 0 auto;
