@@ -397,7 +397,13 @@
                   <div>{{ formatPrice(TotalAmount) }} ກີບ</div>
                 </v-col>
                 <v-col cols="12" class="my-n5 d-flex">
-                  <Customer-home-page />
+                  <v-row>
+                    <v-col cols="12">
+                      <Customer-home-page />
+                      <!-- <v-divider vertical class="mx-1"></v-divider> -->
+                      <guanranted/>
+                    </v-col>
+                  </v-row>
                   <v-divider vertical class="mx-1"></v-divider>
 
                   <v-btn
@@ -466,11 +472,13 @@
                           formatPrice(list.sale_price * list.order_amount)
                         }}ກີບ
                       </td>
+
                       <td class="text-center">
                         <v-btn icon @click="DelOneList(list.id)">
                           <v-icon color="error" large>mdi-close</v-icon>
                         </v-btn>
                       </td>
+
                     </tr>
                   </table>
                 </v-col>
@@ -522,6 +530,9 @@ export default {
     }
   },
   computed: {
+    getGuanranteed(){
+      return this.$store.state.sale.guanranted
+    },
     // __________exchange bath________
     Bath() {
       return this.TotalAmount / this.exchangeBath
@@ -598,8 +609,6 @@ export default {
     await this.$store.dispatch('product/getProductData')
     await this.$store.dispatch('exchange/getExchange')
     await this.$store.dispatch('productType/getAll')
-
-
   },
 
   methods: {
@@ -641,20 +650,20 @@ export default {
         .post('http://localhost:2023/sale', this.sale_data)
         .then((response) => {
           this.sale_detail_data.Sale_id = response.data.id
-
           // send data to sale_detail---------------------------
           this.ListOrder.map((item) => {
             this.sale_detail_data.Pro_id = item.id
             this.sale_detail_data.Exch_id = this.exchange_id
             this.sale_detail_data.Totalkip = item.sale_price
             this.sale_detail_data.Sale_qty = item.order_amount
+            this.sale_detail_data.Guanranteed = this.getGuanranteed.Guanranted
+            this.sale_detail_data.Date_expired = this.getGuanranteed.Date_expired
             return this.$axios.post(
               'http://localhost:2023/sale_detail',
               this.sale_detail_data
             )
           })
           // _____________subtract product quantity___________
-
           this.ListOrder.map((item) => {
             const id = item.id
             const Qt = item.order_amount
@@ -665,7 +674,6 @@ export default {
               }
             )
           })
-
           this.$router.push('/sale/' + this.sale_detail_data.Sale_id)
           this.$toast.success('ສຳເລັດການຂາຍ')
           this.$store.dispatch('product/getProductData')

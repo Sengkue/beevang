@@ -1,7 +1,8 @@
 <template>
   <div>
-    <v-btn color="primary" @click="showListDialog = true">ເລືອກລູກຄ້າ</v-btn>
-
+    <v-btn color="primary" width="100%" @click="showListDialog = true">
+      ເລືອກລູກຄ້າ
+    </v-btn>
     <!-- User List Dialog -->
     <v-dialog v-model="showListDialog" persistent max-width="1000px">
       <v-card>
@@ -26,21 +27,25 @@
                   dense
                 ></v-text-field>
                 <v-divider vertical class="mx-1" inset></v-divider>
-                <v-btn class="cyan accent-4 white--text" @click="showFormDialog = true">
+                <v-btn
+                  class="cyan accent-4 white--text"
+                  @click="showFormDialog = true"
+                >
                   <v-icon>mdi-plus</v-icon> ລູກຄ້າໃຫມ່
                 </v-btn>
               </v-toolbar>
             </template>
 
             <template #[`item.action`]="{ item }">
-              <v-btn text class="mr-2" @click="editUser(item)">
-                ແກ້ໄຂ
-              </v-btn>
+              <v-btn text class="mr-2" @click="editUser(item)"> ແກ້ໄຂ </v-btn>
               <v-btn text class="mr-2" @click="deleteUser(item.id)">
                 ລຶບ
               </v-btn>
-              <v-btn  class="mr-2 cyan accent-4 white--text" @click="selectUser(item.id)">
-               ເລືອກລູກຄ້າ
+              <v-btn
+                class="mr-2 cyan accent-4 white--text"
+                @click="selectUser(item.id)"
+              >
+                ເລືອກລູກຄ້າ
               </v-btn>
             </template>
 
@@ -60,7 +65,9 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="showListDialog = false">ປິດ</v-btn>
+          <v-btn color="blue darken-1" text @click="showListDialog = false"
+            >ປິດ</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -69,7 +76,9 @@
     <v-dialog v-model="showFormDialog" persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ editMode ? 'ແກ້ໄຂລູກຄ້າ' : 'ສ້າງລູກຄ້າໃຫມ່' }}</span>
+          <span class="headline">{{
+            editMode ? 'ແກ້ໄຂລູກຄ້າ' : 'ສ້າງລູກຄ້າໃຫມ່'
+          }}</span>
         </v-card-title>
 
         <v-card-text>
@@ -154,53 +163,54 @@ export default {
         { text: 'Email', value: 'email' },
         { text: 'Action', value: 'action', sortable: false },
       ],
-    };
+    }
   },
   computed: {
     getCustomer() {
-      return this.$store.state.customer.all;
+      return this.$store.state.customer.all
     },
     filteredUsers() {
-      const query = this.searchQuery.toLowerCase().trim();
+      const query = this.searchQuery.toLowerCase().trim()
       return this.getCustomer
         .map((item, index) => {
-          return { index: index + 1, ...item };
+          return { index: index + 1, ...item }
         })
         .filter((user) => {
-          const matchesFname = user.Fname.toLowerCase().includes(query);
-          const matchesTel = user.tel.includes(query);
-          return matchesFname || matchesTel;
-        });
+          const matchesFname = user.Fname.toLowerCase().includes(query)
+          const matchesTel = user.tel.includes(query)
+          return matchesFname || matchesTel
+        })
     },
   },
   mounted() {
-    this.$store.dispatch('customer/selectAll');
+    this.$store.dispatch('customer/selectAll')
   },
   methods: {
     selectUser(id) {
       this.$store.commit('customer/setCustomer_id', id)
+
       this.showListDialog = false
     },
     async save() {
       if (this.$refs.form.validate()) {
-        this.loading = true;
+        this.loading = true
 
         if (this.editMode) {
-          await this.update(this.editId);
+          await this.update(this.editId)
         } else {
-          await this.create();
+          await this.create()
         }
 
-        this.loading = false;
+        this.loading = false
       }
     },
     async create() {
       try {
-        await this.$axios.post('http://localhost:2023/customer', this.user);
-        this.$store.dispatch('customer/selectAll');
-        this.cancel();
+        await this.$axios.post('http://localhost:2023/customer', this.user)
+        this.$store.dispatch('customer/selectAll')
+        this.cancel()
       } catch (error) {
-        this.$toast.error('Error creating customer:', error);
+        this.$toast.error('Error creating customer:', error)
       }
     },
     async update(id) {
@@ -212,42 +222,45 @@ export default {
         province: this.user.province,
         tel: this.user.tel,
         email: this.user.email,
-      };
+      }
 
       try {
-        await this.$axios.put(`http://localhost:2023/customer/${id}`, updatedUser);
-        this.$store.dispatch('customer/selectAll');
-        this.cancel();
+        await this.$axios.put(
+          `http://localhost:2023/customer/${id}`,
+          updatedUser
+        )
+        this.$store.dispatch('customer/selectAll')
+        this.cancel()
       } catch (error) {
-        this.$toast.error('Error updating customer:', error);
+        this.$toast.error('Error updating customer:', error)
       }
     },
     async deleteUser(id) {
       try {
-        await this.$axios.delete(`http://localhost:2023/customer/${id}`);
-        this.$store.dispatch('customer/selectAll');
+        await this.$axios.delete(`http://localhost:2023/customer/${id}`)
+        this.$store.dispatch('customer/selectAll')
       } catch (error) {
-        this.$toast.error('Error deleting customer:', error);
+        this.$toast.error('Error deleting customer:', error)
       }
     },
     cancel() {
-      this.editMode = false;
-      this.editId = '';
-      this.showFormDialog = false;
-      this.$refs.form.reset();
+      this.editMode = false
+      this.editId = ''
+      this.showFormDialog = false
+      this.$refs.form.reset()
     },
     editUser(user) {
-      this.editMode = true;
-      this.editId = user.id;
-      this.user.Fname = user.Fname;
-      this.user.Lname = user.Lname;
-      this.user.gender = user.gender;
-      this.user.village = user.village;
-      this.user.province = user.province;
-      this.user.tel = user.tel;
-      this.user.email = user.email;
-      this.showFormDialog = true;
+      this.editMode = true
+      this.editId = user.id
+      this.user.Fname = user.Fname
+      this.user.Lname = user.Lname
+      this.user.gender = user.gender
+      this.user.village = user.village
+      this.user.province = user.province
+      this.user.tel = user.tel
+      this.user.email = user.email
+      this.showFormDialog = true
     },
   },
-};
+}
 </script>

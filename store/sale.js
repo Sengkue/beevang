@@ -2,7 +2,8 @@ export const state = () => ({
   prescrition: [],
   statusData: [],
   saleDetail:[],
-  sale:{}
+  sale:{},
+  guanranted:{},
 })
 
 export const mutations = {
@@ -17,7 +18,10 @@ export const mutations = {
   },
   setSale(state, data){
     state.sale = data
-  }
+  },
+  setGuanranted(state, data){
+    state.guanranted = data
+  },
 }
 
 export const actions = {
