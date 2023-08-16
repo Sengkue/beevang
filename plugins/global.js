@@ -40,6 +40,19 @@ if (!Vue.__my_mixin__) {
       formatDateBill(date) {
         return moment(date).format('DD/MM/YYYY, HH:mm:ss');
       },
+      formatAndCalculateDaysToExpiration(date) {
+        const formattedDate = this.formatDateLo(date);
+        
+        const expirationDate = dayjs(date);
+        const currentDate = dayjs();
+        const daysUntilExpiration = expirationDate.diff(currentDate, 'day');
+        
+        // Conditionally handle "done" for expired dates
+        const daysLeftOrDone = daysUntilExpiration >= 0 ? `${daysUntilExpiration} ມື້ໝົດຮັບປະກັນ` : 'ໝົດຮັບປະກັນ';
+        
+        return `${formattedDate} (${daysLeftOrDone})`;
+      },
     },
+    // return `${formattedDate} (${daysUntilExpiration} ມື້ໝົດອາຍຸ)`;
   }); // Set up your mixin then
 }

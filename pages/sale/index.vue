@@ -86,7 +86,9 @@
                                 : item.name?.slice(0, 10) + '...'
                             }}
                           </div>
-                          <div class="info--text">{{ formatPrice(item.sale_price) }}kip</div>
+                          <div class="info--text">
+                            {{ formatPrice(item.sale_price) }}kip
+                          </div>
                         </v-card-text>
                       </div>
                     </v-card>
@@ -401,7 +403,7 @@
                     <v-col cols="12">
                       <Customer-home-page />
                       <!-- <v-divider vertical class="mx-1"></v-divider> -->
-                      <guanranted/>
+                      <guanranted />
                     </v-col>
                   </v-row>
                   <v-divider vertical class="mx-1"></v-divider>
@@ -478,7 +480,6 @@
                           <v-icon color="error" large>mdi-close</v-icon>
                         </v-btn>
                       </td>
-
                     </tr>
                   </table>
                 </v-col>
@@ -499,7 +500,7 @@ export default {
 
   data() {
     return {
-      category_id:null,
+      category_id: null,
       exchangeBath: null,
       exchangeDollar: null,
       loading: false,
@@ -530,7 +531,7 @@ export default {
     }
   },
   computed: {
-    getGuanranteed(){
+    getGuanranteed() {
       return this.$store.state.sale.guanranted
     },
     // __________exchange bath________
@@ -585,7 +586,7 @@ export default {
     },
     filteredRow() {
       const searchTerm = this.search ? this.search.toLowerCase().trim() : ''
-    const selectedCategoryId = this.category_id;
+      const selectedCategoryId = this.category_id
 
       return this.$store.state.product.productData
         .map((item, index) => {
@@ -599,7 +600,8 @@ export default {
             item.name && item.name.toLowerCase().includes(searchTerm)
           const barcodeMatch =
             item.barcode && item.barcode.toLowerCase().includes(searchTerm)
-      const categoryFilter = !selectedCategoryId || item.product_type_id === selectedCategoryId;
+          const categoryFilter =
+            !selectedCategoryId || item.product_type_id === selectedCategoryId
 
           return (nameMatch || barcodeMatch) && categoryFilter
         })
@@ -612,7 +614,6 @@ export default {
   },
 
   methods: {
-
     onExchangeSelect() {
       const item = this.getExchange.find((i) => i.id === this.exchange_id)
       if (item.dollartokip > 0) {
@@ -657,7 +658,10 @@ export default {
             this.sale_detail_data.Totalkip = item.sale_price
             this.sale_detail_data.Sale_qty = item.order_amount
             this.sale_detail_data.Guanranteed = this.getGuanranteed.Guanranted
-            this.sale_detail_data.Date_expired = this.getGuanranteed.Date_expired
+              ? this.getGuanranteed.Guanranted
+              : false
+            this.sale_detail_data.Date_expired =
+              this.getGuanranteed.Date_expired
             return this.$axios.post(
               'http://localhost:2023/sale_detail',
               this.sale_detail_data

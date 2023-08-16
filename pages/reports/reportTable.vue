@@ -92,6 +92,21 @@
           </div>
         </v-card>
       </v-col>
+      <v-col cols="12" md="3" sm="12">
+        <v-card
+          rounded="lg"
+          style="cursor: pointer"
+          class="pa-3"
+          to="/reports/guanranteed"
+        >
+          <div class="d-flex justify-space-around align-center">
+            <v-card-subtitle>ສິຄ້າຮັບປະການ</v-card-subtitle>
+            <v-btn fab small color="success">
+              <v-icon color="white">mdi-currency-usd</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
+      </v-col>
     </v-row>
   </div>
 </template>
